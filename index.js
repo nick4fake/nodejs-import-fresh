@@ -13,6 +13,10 @@ module.exports = moduleId => {
 	const cwd = parentPath ? path.dirname(parentPath) : __dirname;
 	const filePath = resolveFrom(cwd, moduleId);
 
+	// https://github.com/sindresorhus/import-fresh/issues/29
+	if (typeof require !== 'undefined' && typeof require.cache === 'undefined') {
+	  require.cache = {}
+	}
 	const oldModule = require.cache[filePath];
 	// Delete itself from module parent
 	if (oldModule && oldModule.parent) {
